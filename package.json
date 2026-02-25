@@ -1,0 +1,41 @@
+{
+  "name": "identityapp",
+  "version": "0.1.0",
+  "description": "CLI for identity.app agent identity, signatures, trust, and integrator flows.",
+  "type": "module",
+  "bin": {
+    "identityapp": "./bin/cli.mjs"
+  },
+  "files": [
+    "dist",
+    "bin",
+    "skills",
+    "README.md"
+  ],
+  "scripts": {
+    "build": "tsup",
+    "dev": "node src/cli.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "keywords": [
+    "identity",
+    "agent",
+    "signature",
+    "verify",
+    "reputation",
+    "integrator",
+    "cli"
+  ],
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "devDependencies": {
+    "@types/node": "^24.5.2",
+    "tsup": "^8.5.0",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "json-canonicalize": "^2.0.0"
+  }
+}
