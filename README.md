@@ -29,6 +29,7 @@ identityapp --help
 
 - `identityapp integrator consent`
 - `identityapp integrator ingest`
+- `identityapp integrator disclosure`
 - `identityapp integrator verify`
 - `identityapp integrator certify`
 
@@ -91,6 +92,9 @@ npx identityapp auth link set <linking_key>
 ```bash
 # Integrator verify with consent context
 npx identityapp integrator verify <signatureHash> --api-key <integratorApiKey>
+
+# Public disclosure for an integrator
+npx identityapp integrator disclosure my-platform
 
 # Ingest signals (bearer auth)
 npx identityapp integrator ingest \

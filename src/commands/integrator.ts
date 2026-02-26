@@ -138,6 +138,37 @@ async function handleIntegratorIngest(args: string[]) {
   console.log(JSON.stringify(body, null, 2));
 }
 
+async function handleIntegratorDisclosure(args: string[]) {
+  const { values, positionals } = parseArgs({
+    args,
+    options: {
+      url: { type: "string", default: DEFAULT_BASE_URL },
+    },
+    strict: true,
+    allowPositionals: true,
+  });
+  const slug = positionals[0];
+  if (!slug) {
+    fail("Usage: identityapp integrator disclosure <slug> [--url <base_url>]");
+  }
+
+  const baseUrl = stripTrailingSlash(values.url);
+  const response = await fetch(
+    `${baseUrl}/api/v1/integrators/${encodeURIComponent(slug)}/disclosure`,
+    {
+      method: "GET",
+      headers: { "Content-Type": "application/json" },
+    },
+  );
+  const body = await readResponseJson(response);
+  if (!response.ok) {
+    fail(
+      `Disclosure fetch failed (${response.status}): ${(body as { error?: string }).error ?? "Unknown error"}`,
+    );
+  }
+  console.log(JSON.stringify(body, null, 2));
+}
+
 function extractApiKey(tokens: string[]) {
   const out: string[] = [];
   let apiKey: string | undefined;
@@ -165,6 +196,10 @@ export async function handleIntegrator(args: string[], ctx: RuntimeContext) {
     await handleIntegratorIngest(rest);
     return;
   }
+  if (subcommand === "disclosure") {
+    await handleIntegratorDisclosure(rest);
+    return;
+  }
   if (subcommand === "verify") {
     const parsed = extractApiKey(rest);
     if (!parsed.apiKey) fail("Missing required flag: --api-key");
@@ -178,5 +213,5 @@ export async function handleIntegrator(args: string[], ctx: RuntimeContext) {
     return;
   }
 
-  fail("Usage: identityapp integrator <consent|ingest|verify|certify> ...");
+  fail("Usage: identityapp integrator <disclosure|consent|ingest|verify|certify> ...");
 }

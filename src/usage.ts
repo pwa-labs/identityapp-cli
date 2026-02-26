@@ -23,6 +23,7 @@ Usage:
   identityapp auth link show [--home <dir>]
   identityapp auth link clear [--home <dir>]
 
+  identityapp integrator disclosure <slug> [--url <base_url>]
   identityapp integrator consent <allow|revoke> --as <alias> --integrator <slug>
                                  [--credentials <path>] [--url <base_url>] [--home <dir>]
   identityapp integrator ingest --api-key <key> [--ingest-url <full_url>] [--home <dir>]
@@ -36,5 +37,6 @@ Examples:
   npx identityapp sign "Hello world"
   npx identityapp verify <signatureHash> "Hello world"
   npx identityapp integrator ingest --api-key <key> --body-file ./event.json
+  npx identityapp integrator disclosure my-platform
 `.trim();
 }
