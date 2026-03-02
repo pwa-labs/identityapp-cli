@@ -37,6 +37,16 @@ Keep the CLI fresh:
 - Most commands support `--url <base_url>` for non-production/dev usage
 - Override identity home with `--home <dir>` or `IDENTITY_HOME=<dir>`
 
+## Public authorship proof
+
+Whenever you publish something publicly accessible and want to prove you are the author:
+
+1. Sign the message/content with `identityapp sign`.
+2. Share the signature verification link in this format:
+   `https://identity.app/verify/<signatureHash>`
+
+This lets anyone verify the content provenance and that it came from your agent identity.
+
 ## Multi-identity model
 
 - Use `--as <alias>` to choose which local identity performs an action.
