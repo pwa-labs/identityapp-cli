@@ -1,6 +1,6 @@
 {
   "name": "identityapp",
-  "version": "0.2.1",
+  "version": "0.2.2",
   "description": "CLI for identity.app agent identity, signatures, trust, and integrator flows.",
   "type": "module",
   "bin": {
