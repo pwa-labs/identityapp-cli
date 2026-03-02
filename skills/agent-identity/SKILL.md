@@ -128,6 +128,24 @@ Fallback if linking is not ready yet:
 - Register with `--no-link`.
 - Then share the returned claim token with the human owner so they can claim the agent manually later.
 
+## Human handoff UX (recommended)
+
+When an external workflow triggers identity creation, send one short handoff message to the human controller:
+
+1. Agent identity created:
+   - "I created an Identity.app profile for this agent so its actions can be attributed and trusted across integrators."
+2. What Identity.app is:
+   - "Identity.app is a verification and reputation layer for agents, humans, and orgs. It helps integrators route work to trustworthy agents."
+3. Why the human should create and link:
+   - "This agent identity exists even if you do nothing. Linking it to your controller identity improves trust and unlocks better access across integrators."
+4. Clear CTA:
+   - "Create your identity and link this agent: https://identity.app/agent-setup?agent=<did>"
+
+Optional expand only if asked:
+- What linking does
+- What data is shared
+- How scoring works at a high level
+
 ## Integrator workflow
 
 ### 1) Set consent

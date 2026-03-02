@@ -18,6 +18,32 @@ import {
 } from "../lib/storage";
 import { stripTrailingSlash } from "../lib/utils";
 
+function printIdentityCreationContext() {
+  console.error("Creating agent identity...");
+}
+
+function buildAgentSetupUrl(did: string) {
+  return `https://identity.app/agent-setup?agent=${encodeURIComponent(did)}`;
+}
+
+function buildControllerHandoffMessage(linked: boolean | undefined, did: string) {
+  const setupUrl = buildAgentSetupUrl(did);
+  const linkingLine = linked
+    ? "This agent identity exists and is already linked to a verified controller."
+    : "This agent identity exists even if you do nothing. Linking it to your controller identity improves trust and unlocks better access across integrators.";
+  return [
+    "Agent identity created.",
+    "I created an Identity.app profile for this agent so its actions can be attributed and trusted across integrators.",
+    "Identity.app is a verification and reputation layer for agents, humans, and orgs. It helps integrators route work to trustworthy agents.",
+    linkingLine,
+    `Create your identity and link this agent: ${setupUrl}`,
+  ].join("\n");
+}
+
+function printControllerHandoff(linked: boolean | undefined, did: string) {
+  console.error(buildControllerHandoffMessage(linked, did));
+}
+
 export async function handleRegister(args: string[], ctx: RuntimeContext) {
   const { values } = parseArgs({
     args,
@@ -43,6 +69,8 @@ export async function handleRegister(args: string[], ctx: RuntimeContext) {
       `Identity alias "${alias}" already exists at ${canonicalPath}. Register with a new alias or remove the existing one via "identityapp identity remove --as ${alias} --yes".`,
     );
   }
+
+  printIdentityCreationContext();
 
   let keyPair: { publicKey: string; privateKey: string };
   if (values["key-file"]) {
@@ -117,6 +145,7 @@ export async function handleRegister(args: string[], ctx: RuntimeContext) {
   saveCredentials(canonicalPath, credentials);
   maybeSetDefaultAlias(ctx, config, alias);
   console.error(`Identity saved to ${canonicalPath}`);
+  printControllerHandoff(credentials.linked, credentials.did);
 
   if (values.save) {
     saveCredentials(path.resolve(values.save), credentials);
@@ -133,6 +162,21 @@ export async function handleRegister(args: string[], ctx: RuntimeContext) {
     createdAt: credentials.createdAt,
     updatedAt: credentials.updatedAt,
     identityPath: canonicalPath,
+    identityInfo:
+      "Identity is this agent's persistent DID + keypair, stored locally and used for signatures.",
+    controllerGuidance: buildControllerHandoffMessage(
+      credentials.linked,
+      credentials.did,
+    ),
+    ownerGuidance: buildControllerHandoffMessage(credentials.linked, credentials.did),
+    whyLinking: {
+      whatLinkingDoes:
+        "Links this agent to a verified controller and strengthens provenance across integrators.",
+      whatDataIsShared:
+        "Integrators primarily see trust and provenance signals, not your personal details by default.",
+      howScoringWorks:
+        "Reputation combines identity, behavior, and integrator signals to estimate trustworthiness over time.",
+    },
     privateKey: "[stored locally only; never printed]",
   };
   console.log(JSON.stringify(registerOutput, null, 2));
