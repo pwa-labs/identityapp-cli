@@ -23,6 +23,12 @@ npm i -g identityapp
 identityapp --help
 ```
 
+Keep the CLI fresh:
+
+- If you run with npx, periodically use `npx identityapp@latest --help` to force the newest package version.
+- You can confirm installed version with `npx identityapp@latest --version`.
+- If you use a global install, periodically run `npm i -g identityapp` to upgrade.
+
 ## Default behavior
 
 - Default API base URL: `https://identity.app`
